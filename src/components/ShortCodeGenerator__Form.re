@@ -130,29 +130,38 @@ let inputClasses = status => {
 [@react.component]
 let make = (~callbackCB) => {
   let (state, send) = React.useReducer(reducer, {status: Empty, url: ""});
-  <div className="w-full flex md:flex-row flex-col ">
-    <div className="w-full">
-      <label
-        className="inline-block tracking-wide text-xs font-semibold hidden"
-        htmlFor="url">
-        {"Enter the url" |> str}
-      </label>
-      <input
-        value={state.url}
-        onChange={event =>
-          send(UpdateUrl(ReactEvent.Form.target(event)##value))
-        }
-        className={inputClasses(state.status)}
-        id="url"
-        type_="url"
-        placeholder="http://bodhish.in"
-      />
+  <div className="w-full">
+    <div className="w-full flex md:flex-row flex-col ">
+      <div className="w-full">
+        <label
+          className="inline-block tracking-wide text-xs font-semibold hidden"
+          htmlFor="url">
+          {"Enter the url" |> str}
+        </label>
+        <input
+          value={state.url}
+          onChange={event =>
+            send(UpdateUrl(ReactEvent.Form.target(event)##value))
+          }
+          className={inputClasses(state.status)}
+          id="url"
+          type_="url"
+          placeholder="http://bodhish.in"
+        />
+      </div>
+      <button
+        disabled={UrlUtils.isInvalid(false, state.url)}
+        onClick={_ => createShortCode(state.url, send, callbackCB)}
+        className={buttonClasses(state.url)}>
+        {React.string("Shorten")}
+      </button>
     </div>
-    <button
-      disabled={UrlUtils.isInvalid(false, state.url)}
-      onClick={_ => createShortCode(state.url, send, callbackCB)}
-      className={buttonClasses(state.url)}>
-      {React.string("Shorten")}
-    </button>
+    {switch (state.status) {
+     | Error =>
+       <div className="text-red-500 p-1">
+         {React.string("Requert failed Please enter a valid Url")}
+       </div>
+     | _ => React.null
+     }}
   </div>;
 };
