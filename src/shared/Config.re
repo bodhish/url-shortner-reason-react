@@ -1,2 +1,2 @@
-let backendHost = "http://localhost:3000/";
-let frontendHost = "http://localhost:1234/";
+let backendHost = "https://shortcode.okey.run/";
+let frontendHost = "https://c.okey.run/";
