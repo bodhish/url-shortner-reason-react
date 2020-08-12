@@ -149,8 +149,8 @@ let make = (~callbackCB) => {
           placeholder="http://bodhish.in"
         />
       </div>
+        // disabled={UrlUtils.isInvalid(false, state.url)}
       <button
-        disabled={UrlUtils.isInvalid(false, state.url)}
         onClick={_ => createShortCode(state.url, send, callbackCB)}
         className={buttonClasses(state.url)}>
         {React.string("Shorten")}
