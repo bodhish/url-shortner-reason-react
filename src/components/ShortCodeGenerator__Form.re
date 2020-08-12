@@ -114,12 +114,12 @@ let buttonClasses = url => {
   );
 };
 
-let inputClasses = status => {
+let inputClasses = (status, url) => {
   "appearance-none block w-full bg-white border rounded py-3 px-4 mr-2 mt-2 leading-tight focus:outline-none focus:bg-white "
   ++ (
     switch (status) {
     | Empty => "border-gray-400 focus:border-gray-500"
-    | Editing
+    | Editing => UrlUtils.isInvalid(false, url) ? "border-red-400 focus:border-red-500" : "border-green-400 focus:border-green-500"
     | Saving => "border-blue-400 focus:border-blue-500"
     | Complete => "border-green-400 focus:border-green-500"
     | Error => "border-red-400 focus:border-red-500"
@@ -143,14 +143,14 @@ let make = (~callbackCB) => {
           onChange={event =>
             send(UpdateUrl(ReactEvent.Form.target(event)##value))
           }
-          className={inputClasses(state.status)}
+          className={inputClasses(state.status, state.url)}
           id="url"
           type_="url"
           placeholder="http://bodhish.in"
         />
       </div>
-        // disabled={UrlUtils.isInvalid(false, state.url)}
       <button
+        disabled={UrlUtils.isInvalid(false, state.url)}
         onClick={_ => createShortCode(state.url, send, callbackCB)}
         className={buttonClasses(state.url)}>
         {React.string("Shorten")}
